@@ -46,32 +46,32 @@ namespace Catalogs.API.Infrastructure.Persistence
                     {
                         new CatalogElement
                         {
-                            Fields = new Dictionary<int, string>
+                            Fields = new Dictionary<int, object>
                             {
                                 { 1, "1" },
                                 { 2, "Объект 1" },
                                 { 3, "S-01" },
-                                { 4, "100.25" }
+                                { 4, 100.25 }
                             }
                         },
                         new CatalogElement
                         {
-                            Fields = new Dictionary<int, string>
+                            Fields = new Dictionary<int, object>
                             {
                                 { 1, "2" },
                                 { 2, "Объект 2" },
                                 { 3, "S-03" },
-                                { 4, "150" }
+                                { 4, 150 }
                             }
                         },
                         new CatalogElement
                         {
-                            Fields = new Dictionary<int, string>
+                            Fields = new Dictionary<int, object>
                             {
                                 { 1, "3" },
                                 { 2, "Объект 3" },
                                 { 3, "S-QWE" },
-                                { 4, "99.678" }
+                                { 4, 99.678 }
                             }
                         }
                     }
@@ -105,7 +105,7 @@ namespace Catalogs.API.Infrastructure.Persistence
                     {
                         new CatalogElement
                         {
-                            Fields = new Dictionary<int, string>
+                            Fields = new Dictionary<int, object>
                             {
                                 { 1, "1" },
                                 { 2, "Версия 1" },
@@ -114,7 +114,7 @@ namespace Catalogs.API.Infrastructure.Persistence
                         },
                         new CatalogElement
                         {
-                            Fields = new Dictionary<int, string>
+                            Fields = new Dictionary<int, object>
                             {
                                 { 1, "2" },
                                 { 2, "Версия 2" },
@@ -123,7 +123,7 @@ namespace Catalogs.API.Infrastructure.Persistence
                         },
                         new CatalogElement
                         {
-                            Fields = new Dictionary<int, string>
+                            Fields = new Dictionary<int, object>
                             {
                                 { 1, "3" },
                                 { 2, "Версия 3" },

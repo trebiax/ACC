@@ -18,7 +18,7 @@ namespace Catalogs.API.Application.CommandExecutors
             _repository = repository;
         }
 
-        public async Task<List<Dictionary<string, string>>> GetCatalog(int catalogId)
+        public async Task<List<Dictionary<string, object>>> GetCatalog(int catalogId)
         {
             var catalog = await _repository.GetCatalog(catalogId);
 

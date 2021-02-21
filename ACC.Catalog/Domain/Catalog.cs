@@ -12,17 +12,15 @@ namespace Catalogs.API.Domain
         public List<CatalogAttribute> Attributes { get; internal set; }
         public List<CatalogElement> Elements { get; set; }
 
-        public object GetElementFieldValue(CatalogElement element, int attributeId)
+        public object ConvertToElementFieldValue(string value, int attributeId)
         {
             var attribute = Attributes.SingleOrDefault(async => async.Id == attributeId);
 
             if (attribute == null)
                 throw new ArgumentException("No attribute with provided id exists");
 
-            var stringValue = element.Fields[attributeId];
-
             return DataTypeConverterResolver.GetDataTypeConverter(attribute.DataType)
-                                            .Convert(stringValue);
+                                            .Convert(value);
         }
     }
 }

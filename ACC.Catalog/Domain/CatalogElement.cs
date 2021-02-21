@@ -7,6 +7,6 @@ namespace Catalogs.API.Domain
         /// <summary>
         /// Key of dictionary represents id of an attribute
         /// </summary>
-        public Dictionary<int, string> Fields { get; internal set; }
+        public Dictionary<int, object> Fields { get; internal set; }
     }
 }

@@ -19,7 +19,7 @@ namespace ACC.Catalog.Controllers
         }
 
         [HttpGet("{catalogId}")]
-        [Produces(typeof(List<Dictionary<string, string>>))]
+        [Produces(typeof(List<Dictionary<string, object>>))]
         public async Task<IActionResult> Get(int catalogId)
         {
             return (await _commandExecutor.GetCatalog(catalogId)).ToHttpResponse();
