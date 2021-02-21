@@ -3,11 +3,11 @@ using Catalogs.API.Domain;
 
 namespace Catalogs.API.Infrastructure.Persistence
 {
-    public static class CatalogDb
+    public class CatalogDb
     {
-        public static List<Catalog> Catalogs { get; private set; }
+        public List<Catalog> Catalogs { get; private set; }
 
-        static CatalogDb()
+        public CatalogDb()
         {
             Catalogs = new List<Catalog>
             {

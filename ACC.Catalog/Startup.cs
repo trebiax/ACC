@@ -1,3 +1,5 @@
+using Catalogs.API.Application.CommandExecutors;
+using Catalogs.API.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -25,6 +27,10 @@ namespace ACC.Catalog
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSingleton<CatalogDb>();
+            services.AddTransient<ICatalogRepository, MemoryCatalogRepository>();
+            services.AddTransient<CatalogCommandExecutor>();
+
             services.AddSwaggerGen();
             services.AddControllers();
         }
