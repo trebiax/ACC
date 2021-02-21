@@ -16,8 +16,14 @@ namespace ACC.Catalog.Controllers
             _commandExecutor = commandExecutor;
         }
 
-        [HttpGet("{catalogId}/metadata")]
+        [HttpGet("{catalogId}")]
         public async Task<IActionResult> Get(int catalogId)
+        {
+            return (await _commandExecutor.GetCatalog(catalogId)).ToHttpResponse();
+        }
+
+        [HttpGet("{catalogId}/metadata")]
+        public async Task<IActionResult> GetMetadata(int catalogId)
         {
             return (await _commandExecutor.GetCatalogMetadata(catalogId)).ToHttpResponse();
         }

@@ -1,4 +1,5 @@
 ﻿using Catalogs.API.Application.Dtos;
+using Catalogs.API.Domain;
 using Catalogs.API.Infrastructure.Persistence;
 using Common.Application.Exceptions;
 using System;
@@ -15,6 +16,16 @@ namespace Catalogs.API.Application.CommandExecutors
         public CatalogCommandExecutor(ICatalogRepository repository)
         {
             _repository = repository;
+        }
+
+        public async Task<Catalog> GetCatalog(int catalogId)
+        {
+            var catalog = await _repository.GetCatalog(catalogId);
+
+            if (catalog == null)
+                throw new NotFoundException();
+
+            return catalog;
         }
 
         public async Task<CatalogMetadataDto> GetCatalogMetadata(int catalogId)
