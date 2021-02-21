@@ -18,14 +18,24 @@ namespace Catalogs.API.Application.CommandExecutors
             _repository = repository;
         }
 
-        public async Task<Catalog> GetCatalog(int catalogId)
+        public async Task<List<Dictionary<string, string>>> GetCatalog(int catalogId)
         {
             var catalog = await _repository.GetCatalog(catalogId);
 
             if (catalog == null)
                 throw new NotFoundException();
 
-            return catalog;
+            return catalog.Elements.Select(el => 
+            {
+                return el.Fields.Select(field =>
+                {
+                    var attribute = catalog.Attributes.First(a => a.Id == field.Key);
+
+                    return new { Key = attribute.Name, Value = field.Value };
+                })
+                .ToDictionary(f => f.Key, f => f.Value);
+
+            }).ToList();
         }
 
         public async Task<CatalogMetadataDto> GetCatalogMetadata(int catalogId)
