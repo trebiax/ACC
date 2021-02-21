@@ -43,7 +43,7 @@ namespace ACC.Catalog
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Catalog.API");
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Catalogs.API");
                 c.RoutePrefix = string.Empty;
             });
 
