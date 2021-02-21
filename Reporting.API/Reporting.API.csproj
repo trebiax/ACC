@@ -10,7 +10,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Catalogs.Client\Catalogs.Client.csproj" />
     <ProjectReference Include="..\Common.Application\Common.Application.csproj" />
+    <ProjectReference Include="..\Data.Client\Data.Client.csproj" />
   </ItemGroup>
 
 </Project>

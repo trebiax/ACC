@@ -1,5 +1,6 @@
 ﻿using Catalogs.API.Application.CommandExecutors;
 using Catalogs.API.Application.Dtos;
+using Catalogs.API.Domain;
 using Common.Application.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -23,6 +24,13 @@ namespace ACC.Catalog.Controllers
         public async Task<IActionResult> Get(int catalogId)
         {
             return (await _commandExecutor.GetCatalog(catalogId)).ToHttpResponse();
+        }
+
+        [HttpGet("{catalogId}/elements")]
+        [Produces(typeof(List<CatalogElement>))]
+        public async Task<IActionResult> GetCatalogElements(int catalogId)
+        {
+            return (await _commandExecutor.GetCatalogElements(catalogId)).ToHttpResponse();
         }
 
         [HttpGet("{catalogId}/metadata")]

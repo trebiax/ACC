@@ -1,3 +1,5 @@
+using Catalogs.Client;
+using Data.Client;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -6,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Reporting.API.Application.CommandExecutors;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,9 +28,14 @@ namespace Reporting.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSwaggerGen();
+            services.AddTransient<ReportingCommandExecutor>();
+
+            services.AddSwaggerGen(options => options.CustomSchemaIds(type => type.ToString()));
             services.AddControllers()
                     .AddNewtonsoftJson();
+
+            services.RegisterCatalogClient(Configuration)
+                    .RegisterDataClient(Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

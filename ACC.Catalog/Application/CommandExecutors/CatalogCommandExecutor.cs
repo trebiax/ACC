@@ -18,6 +18,17 @@ namespace Catalogs.API.Application.CommandExecutors
             _repository = repository;
         }
 
+        // [TODO]: Let pull partially, by ids
+        public async Task<List<CatalogElement>> GetCatalogElements(int catalogId)
+        {
+            var catalog = await _repository.GetCatalog(catalogId);
+
+            if (catalog == null)
+                throw new NotFoundException();
+
+            return catalog.Elements;
+        }
+
         public async Task<List<Dictionary<string, object>>> GetCatalog(int catalogId)
         {
             var catalog = await _repository.GetCatalog(catalogId);
