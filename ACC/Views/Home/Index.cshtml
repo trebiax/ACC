@@ -1,7 +1,19 @@
-﻿@{
+﻿
+@{
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-  test
-</div>
+<form asp-controller="Home" asp-action="Report" method="post">
+    <div>
+        <textarea name="firstCatalogMetadataJson" style="min-height: 250px; width: 260px;">
+{"catalogId": "1","attributes": [{"id": "3"},{"id": "2"}]}
+        </textarea>
+        <textarea name="secondCatalogMetadataJson" style="min-height: 250px; width: 260px;">
+{"catalogId": "2","attributes": [{"id": "2"}]}
+        </textarea>
+    </div>
+    <div>
+        <input class="btn btn-outline-success" type="submit" value="Generate report" />
+    </div>
+
+</form>

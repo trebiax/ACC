@@ -31,35 +31,39 @@ namespace Reporting.API.Application.CommandExecutors
             var secondCatalogElements = (await _catalogClient.GetCatalogElements(columnCatalogRepresentation.CatalogId)).Content;
 
 
-            List<CatalogElementCrossDto> crossRequestDtos = firstCatalogElements
-                                                   .SelectMany(el =>
-                                                       secondCatalogElements.Select(el2 => new CatalogElementCrossDto
-                                                       {
-                                                           FirstElement = new CatalogElement
-                                                           {
-                                                               // Trick, we assumpt that first is id
-                                                               // [TODO]: Should be done generally
-                                                               CatalogId = rowCatalogRepresentation.CatalogId,
-                                                               ElementId = Convert.ToInt32(el.Fields[rowCatalogMetadata.Attributes.First().Id])
-                                                           },
-                                                           SecondElement = new CatalogElement
-                                                           {
-                                                               CatalogId = columnCatalogRepresentation.CatalogId,
-                                                               ElementId = Convert.ToInt32(el2.Fields[columnCatalogMetadata.Attributes.First().Id])
-                                                           }
-                                                       })).ToList();
+            List<CatalogElementCrossDto> crossRequestDtos = 
+                            firstCatalogElements
+                            .SelectMany(el =>
+                                secondCatalogElements.Select(el2 => new CatalogElementCrossDto
+                                {
+                                    FirstElement = new CatalogElement
+                                    {
+                                        // Trick, we assumpt that first is id
+                                        // [TODO]: Should be done generally
+                                        CatalogId = rowCatalogRepresentation.CatalogId,
+                                        ElementId = Convert.ToInt32(el.Fields[rowCatalogMetadata.Attributes.First().Id])
+                                    },
+                                    SecondElement = new CatalogElement
+                                    {
+                                        CatalogId = columnCatalogRepresentation.CatalogId,
+                                        ElementId = Convert.ToInt32(el2.Fields[columnCatalogMetadata.Attributes.First().Id])
+                                    }
+                                })).ToList();
 
             var crosses = (await _dataClient.GetCatalogElementCrosses(crossRequestDtos)).Content;
 
-            var headers = rowCatalogMetadata.Attributes.Where(a =>
-                                                                    rowCatalogRepresentation.Attributes.Any(ar => ar.Id == a.Id))
-                                                       .Select(a => new { a.Id, a.Name, IsFromColumn = false })
-                                                       .ToList();
+            var headers = rowCatalogMetadata
+                            .Attributes
+                            .Where(a => rowCatalogRepresentation.Attributes.Any(ar => ar.Id == a.Id))
+                            .Select(a => new { a.Id, Name = "", IsFromColumn = false })
+                            .OrderBy(a => rowCatalogRepresentation.Attributes.IndexOf(
+                                            rowCatalogRepresentation.Attributes.First(attrRepr => a.Id == attrRepr.Id)))
+                            .ToList();
 
-            var selectedColumnCatalogAttributes = columnCatalogMetadata.Attributes
-                                                                       .Where(a =>
-                                                                                columnCatalogRepresentation.Attributes.Any(ar => ar.Id == a.Id))
-                                                                       .ToList();
+            var selectedColumnCatalogAttributes = columnCatalogMetadata
+                                                    .Attributes
+                                                    .Where(a =>columnCatalogRepresentation.Attributes.Any(ar => ar.Id == a.Id))
+                                                    .ToList();
 
             foreach (var element in secondCatalogElements)
             {
@@ -77,6 +81,9 @@ namespace Reporting.API.Application.CommandExecutors
 
             List<List<string>> table = new List<List<string>>();
 
+            // Add headers as first row
+            table.Add(headers.Select(h => h.Name).ToList());
+
             foreach (var firstCatalogElement in firstCatalogElements)
             {
                 var firstCatalogElementId = Convert.ToInt32(firstCatalogElement.Fields[rowCatalogMetadata.Attributes.First().Id]);
@@ -91,10 +98,10 @@ namespace Reporting.API.Application.CommandExecutors
 
                 foreach (var secondCatalogHeader in secondCatalogHeaders)
                 {
-                    var crossValue = crosses.First(c => c.FirstElement.ElementId == firstCatalogElementId &&
-                                                        c.SecondElement.ElementId == secondCatalogHeader.Id).Amount;
+                    var crossValue = crosses.FirstOrDefault(c => c.FirstElement.ElementId == firstCatalogElementId &&
+                                                        c.SecondElement.ElementId == secondCatalogHeader.Id);
 
-                    rowData.Add(crossValue.ToString());
+                    rowData.Add(crossValue?.Amount.ToString() ?? "-");
                 }
 
                 table.Add(rowData);

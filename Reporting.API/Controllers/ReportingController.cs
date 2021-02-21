@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Reporting.API.Application;
 using Reporting.API.Application.CommandExecutors;
 using Reporting.API.Application.Dtos;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Reporting.API.Controllers
@@ -18,19 +19,15 @@ namespace Reporting.API.Controllers
             _commandExecutor = commandExecutor;
         }
 
-        private string str1 = "{\"catalogId\": \"1\",\"attributes\": [{\"id\": \"3\"},{\"id\": \"2\"}]}";
-        private string str2 = "{\"catalogId\": \"2\",\"attributes\": [{\"id\": \"2\"}]}";
-
-
         [HttpGet]
-        public async Task<IActionResult> Get(string firstCatalogMetadataJson, string secondCatalogMetadataJson)
+        [Produces(typeof(List<List<string>>))]
+        public async Task<IActionResult> GetGeneratedReport(string firstCatalogMetadataJson, string secondCatalogMetadataJson)
         {
-            var firstCatalogMetadata = DtoResolver<CatalogMetadataPresentation>.DeserializeFrom(str1);
-            var secondCatalogMetadata = DtoResolver<CatalogMetadataPresentation>.DeserializeFrom(str2);
+            var firstCatalogMetadata = DtoResolver<CatalogMetadataPresentation>.DeserializeFrom(firstCatalogMetadataJson);
+            var secondCatalogMetadata = DtoResolver<CatalogMetadataPresentation>.DeserializeFrom(secondCatalogMetadataJson);
 
-            await _commandExecutor.GenerateReport(firstCatalogMetadata, secondCatalogMetadata);
-
-            return "".ToHttpResponse();
+            return (await _commandExecutor.GenerateReport(firstCatalogMetadata, secondCatalogMetadata))
+                    .ToHttpResponse();
         }
     }
 }
